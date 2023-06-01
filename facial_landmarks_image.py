@@ -6,6 +6,7 @@ import argparse
 # define the CLI parameters
 parser = argparse.ArgumentParser()
 parser.add_argument('-i', '--image', help='The image with a face from where you want to detect the landmarks', required=False, default='C:/Users/pcteste1/Downloads/profile_image.jpg')
+parser.add_argument('-l', '--landmarks', help='The path to the landmarks file', required=False, default="C:\\Users\\pcteste1\\Documents\\Gitkraken\\CV_Landmarks\\shape_predictor_68_face_landmarks.dat")
 
 # convert the arguments
 args = vars(parser.parse_args())
@@ -14,7 +15,7 @@ args = vars(parser.parse_args())
 img = cv2.imread(args['image'])
 assert img is not None, 'Image not found'
 
-# resize the image to half its size
+# reduce the image size
 img = cv2.resize(img, None, fx=0.2, fy=0.2)
 
 # convert image to grayscale
@@ -24,10 +25,8 @@ gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 face_detector = dlib.get_frontal_face_detector()
 
 # landmark points
-landmarks = dlib.shape_predictor("C:\\Users\\pcteste1\\Downloads\\shape_predictor_68_face_landmarks.dat")
-
-# convert image to grayscale
-gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+landmarks = dlib.shape_predictor(args['landmarks'])
+assert landmarks is not None, "Landmarks file not found. Please change the path"
 
 # find coordinates of the face
 # The 1 in the second argument indicates that we should upsample the image 1 time
